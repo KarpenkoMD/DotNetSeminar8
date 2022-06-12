@@ -8,6 +8,18 @@ class Program
         int Value = 0;
         int Amount =0;  
       } */
+    public static int GetExistedElementNumber(int[,] arrayToSeek, int arrayLength, int element)
+    {
+        int elementNumber = 0;
+        for (elementNumber = 0; elementNumber < arrayLength; elementNumber++)
+        {
+            if (arrayToSeek[elementNumber, 0] == element)
+            {
+                return elementNumber;
+            }
+        }
+        return -1;
+    }
     public static void Reset2DArray(int[,] arrayToReset)
     {
         for (int i = 0; i < arrayToReset.GetLength(0); i++)
@@ -23,28 +35,24 @@ class Program
         int[,] collection = new int[arrayToSeek.GetLength(0) * arrayToSeek.GetLength(1), 2];
         Reset2DArray(collection);
         int collectionLength = 1;
-        bool newElement = true;
+        int existedElementNum = -2;
         collection[0, 0] = arrayToSeek[0, 0];
         for (int i = 0; i < arrayToSeek.GetLength(0); i++)
         {
             for (int j = 0; j < arrayToSeek.GetLength(1); j++)
             {
-                newElement = true;
-                for (int k = 0; k < collectionLength; k++)
-                {
-                    if (collection[k, 0] == arrayToSeek[i, j])
-                    {
-                        collection[k, 1] += 1;
-                        newElement = false;
-                    }
-                }
-                if (newElement == true)
+                existedElementNum = GetExistedElementNumber(collection, collectionLength, arrayToSeek[i, j]);
+                if (existedElementNum == -1)
                 {
                     collection[collectionLength, 0] = arrayToSeek[i, j];
                     collection[collectionLength, 1] += 1;
                     collectionLength++;
-                    newElement = false;
                 }
+                else if (existedElementNum >= 0)
+                {
+                    collection[existedElementNum, 1] += 1;
+                }
+                // existedElementNum = -2;
             }
         }
         return collection;
@@ -54,7 +62,7 @@ class Program
         Console.WriteLine();
         for (int i = 0; i < collectionToPrint.GetLength(0); i++)
         {
-            if (collectionToPrint[i, 1] != 0)
+            if (collectionToPrint[i, 1] > 0)
             {
                 if (collectionToPrint[i, 1] >= 2 && collectionToPrint[i, 1] <= 4)
                 {
